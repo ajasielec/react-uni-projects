@@ -1,0 +1,33 @@
+name: Deploy React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sprawdź repozytorium
+        uses: actions/checkout@v2
+
+      - name: Ustaw Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Zainstaluj zależności
+        working-directory: ./02-react
+        run: npm install
+
+      - name: Zbuduj aplikację React
+        working-directory: ./02-react
+        run: npm run build
+
+      - name: Wdróż na GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./02-react/build  # Ścieżka do folderu z wynikami builda
